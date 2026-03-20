@@ -1,3 +1,5 @@
+![Gig Shield](https://o9yqetpj645smjx6.public.blob.vercel-storage.com/Gig%20Shield.png)
+
 >> GigShield - AI-Powered Income Protection for Delivery Partners
 
 - "When work stops, income should not." 
