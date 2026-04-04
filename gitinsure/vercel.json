@@ -6,7 +6,7 @@
   "rewrites": [
     {
       "source": "/api/:path*",
-      "destination": "https://RENDER_BACKEND_URL/api/:path*"
+      "destination": "https://gitinsure-api.onrender.com/api/:path*"
     }
   ]
 }
