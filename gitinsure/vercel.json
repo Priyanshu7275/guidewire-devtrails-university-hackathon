@@ -1,5 +1,5 @@
 {
-  "framework": "static",
+  "framework": "vite",
   "buildCommand": "",
   "installCommand": "",
   "outputDirectory": ".",
