@@ -10,4 +10,4 @@ services:
     autoDeploy: true
     envVars:
       - key: OPENWEATHERMAP_API_KEY
-        value: ""
+        value: "ed2d2f9dc32a0ebd848c9c4dc8c67dac"
