@@ -1,5 +1,5 @@
-venv/
-__pycache__/
-*.pyc
+gitinsure/venv/
+gitinsure/__pycache__/
+**/*.pyc
 .DS_Store
 Thumbs.db
