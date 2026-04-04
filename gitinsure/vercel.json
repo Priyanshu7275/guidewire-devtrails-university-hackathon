@@ -1,4 +1,8 @@
 {
+  "framework": "static",
+  "buildCommand": "",
+  "installCommand": "",
+  "outputDirectory": ".",
   "rewrites": [
     {
       "source": "/api/:path*",
