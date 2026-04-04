@@ -884,7 +884,8 @@ function showPage(name) {
 }
 
 // ─── STATE ───────────────────────────────────────────────────────────────────
-const API = 'http://localhost:8000/api';
+// Set to relative path; Vercel will proxy /api to the Render backend via vercel.json
+const API = '/api';
 let WORKER = null;          // logged-in worker object
 let SELECTED_PLAN = 'standard';
 let PLAN_DATA = {};         // {basic:{final_premium,coverage_cap,...}, ...}

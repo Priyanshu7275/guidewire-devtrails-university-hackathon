@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: gitinsure-api
+    env: docker
+    plan: free
+    repo: https://github.com/Priyanshu7275/guidewire-devtrails-university-hackathon
+    branch: main
+    rootDir: gitinsure
+    dockerfilePath: gitinsure/Dockerfile
+    autoDeploy: true
+    envVars:
+      - key: OPENWEATHERMAP_API_KEY
+        value: ""

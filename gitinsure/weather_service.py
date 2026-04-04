@@ -11,7 +11,7 @@ import requests
 from datetime import datetime
 
 # ── Keys — read from environment ONLY (never hardcode) ───────────────────────
-OWM_KEY = "ed2d2f9dc32a0ebd848c9c4dc8c67dac"
+OWM_KEY = os.getenv("OPENWEATHERMAP_API_KEY", "")
 
 OWM_BASE = "https://api.openweathermap.org/data/2.5"
 GEO_BASE = "http://api.openweathermap.org/geo/1.0"
