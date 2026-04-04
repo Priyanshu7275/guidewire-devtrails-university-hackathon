@@ -5,8 +5,9 @@ services:
     plan: free
     repo: https://github.com/Priyanshu7275/guidewire-devtrails-university-hackathon
     branch: main
-    rootDir: gitinsure
+    # Build from repo root; set Docker context explicitly to project folder
     dockerfilePath: gitinsure/Dockerfile
+    dockerContext: gitinsure
     autoDeploy: true
     envVars:
       - key: OPENWEATHERMAP_API_KEY
