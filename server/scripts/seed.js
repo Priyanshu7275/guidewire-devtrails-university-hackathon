@@ -92,7 +92,7 @@ const TRIGGER_LOGS_DEF = [
   ['201301', 'heavy_rain',     22.4, 15,  true,  'openweathermap', 0.01 ],  // ~14 min ago
   ['110001', 'heavy_rain',     25.7, 15,  true,  'openweathermap', 0.02 ],  // ~29 min ago
   ['110001', 'extreme_heat',   45.2, 43,  true,  'openweathermap', 0.02 ],  // ~29 min ago
-  ['201301', 'dangerous_aqi',  315,  200, true,  'openweathermap', 0.03 ],  // ~43 min ago
+  ['201301', 'dangerous_aqi',  372,  350, true,  'openweathermap', 0.03 ],  // ~43 min ago
   // ── ELEVATED (2–6 hours ago, resolved) ────────────────────────────────
   ['201301', 'heavy_rain',     18.1, 15,  true,  'openweathermap', 0.15 ],  // ~3.6 hrs ago
   ['110002', 'heavy_rain',     17.3, 15,  true,  'openweathermap', 0.18 ],  // ~4.3 hrs ago
@@ -102,8 +102,8 @@ const TRIGGER_LOGS_DEF = [
   ['122001', 'extreme_heat',   44.0, 43,  true,  'openweathermap', 8   ],
   ['201303', 'extreme_heat',   43.8, 43,  true,  'openweathermap', 15  ],
   // dangerous_aqi (historical)
-  ['110001', 'dangerous_aqi',  342,  200, true,  'openweathermap', 10  ],
-  ['110002', 'dangerous_aqi',  298,  200, true,  'openweathermap', 18  ],
+  ['110001', 'dangerous_aqi',  368,  350, true,  'openweathermap', 10  ],
+  ['110002', 'dangerous_aqi',  355,  350, true,  'openweathermap', 18  ],
   // platform_outage (fired)
   ['201301', 'platform_outage',  1,  1,   true,  'manual',         6   ],
   ['560001', 'platform_outage',  1,  1,   true,  'manual',         11  ],
@@ -123,7 +123,7 @@ const TRIGGER_LOGS_DEF = [
   ['122001', 'extreme_heat',   41.5, 43,  false, 'openweathermap', 19  ],
   ['560001', 'heavy_rain',      7.8, 15,  false, 'openweathermap', 21  ],
   ['400001', 'extreme_heat',   40.1, 43,  false, 'openweathermap', 23  ],
-  ['700001', 'dangerous_aqi',  145,  200, false, 'openweathermap', 24  ],
+  ['700001', 'dangerous_aqi',  280,  350, false, 'openweathermap', 24  ],
   ['600001', 'heavy_rain',     11.3, 15,  false, 'openweathermap', 26  ],
 ];
 
@@ -156,9 +156,9 @@ const CLAIMS_DEF = [
   { wIdx: 6, triggerType: 'platform_outage', triggerValue: 1,    fraudScore: 0.08, decision: 'AUTO_APPROVE', payoutAmount: 138, status: 'paid',         daysBack: 20,  gpsVerified: true,  sessionMinutes: 120 },
   { wIdx: 5, triggerType: 'platform_outage', triggerValue: 1,    fraudScore: 0.21, decision: 'AUTO_APPROVE', payoutAmount: 88,  status: 'paid',         daysBack: 11,  gpsVerified: true,  sessionMinutes: 90  },
   { wIdx: 8, triggerType: 'extreme_heat',    triggerValue: 44.0, fraudScore: 0.14, decision: 'AUTO_APPROVE', payoutAmount: 106, status: 'paid',         daysBack: 8,   gpsVerified: true,  sessionMinutes: 75  },
-  { wIdx: 3, triggerType: 'dangerous_aqi',   triggerValue: 315,  fraudScore: 0.17, decision: 'AUTO_APPROVE', payoutAmount: 75,  status: 'paid',         daysBack: 4,   gpsVerified: true,  sessionMinutes: 60  },
+  { wIdx: 3, triggerType: 'dangerous_aqi',   triggerValue: 372,  fraudScore: 0.17, decision: 'AUTO_APPROVE', payoutAmount: 75,  status: 'paid',         daysBack: 4,   gpsVerified: true,  sessionMinutes: 60  },
   // ── AUTO_APPROVE · status=approved (4) ──────────────────────────────
-  { wIdx: 0, triggerType: 'dangerous_aqi',   triggerValue: 342,  fraudScore: 0.22, decision: 'AUTO_APPROVE', payoutAmount: 100, status: 'approved',     daysBack: 1,   gpsVerified: true,  sessionMinutes: 60  },
+  { wIdx: 0, triggerType: 'dangerous_aqi',   triggerValue: 368,  fraudScore: 0.22, decision: 'AUTO_APPROVE', payoutAmount: 100, status: 'approved',     daysBack: 1,   gpsVerified: true,  sessionMinutes: 60  },
   { wIdx: 9, triggerType: 'extreme_heat',    triggerValue: 45.2, fraudScore: 0.11, decision: 'AUTO_APPROVE', payoutAmount: 78,  status: 'approved',     daysBack: 1,   gpsVerified: true,  sessionMinutes: 60  },
   { wIdx: 7, triggerType: 'curfew',          triggerValue: 1,    fraudScore: 0.19, decision: 'AUTO_APPROVE', payoutAmount: 69,  status: 'approved',     daysBack: 9,   gpsVerified: true,  sessionMinutes: 90  },
   { wIdx: 4, triggerType: 'curfew',          triggerValue: 1,    fraudScore: 0.25, decision: 'AUTO_APPROVE', payoutAmount: 113, status: 'approved',     daysBack: 16,  gpsVerified: true,  sessionMinutes: 75  },
@@ -167,7 +167,7 @@ const CLAIMS_DEF = [
   { wIdx: 0, triggerType: 'curfew',          triggerValue: 1,    fraudScore: 0.71, decision: 'MANUAL_REVIEW',payoutAmount: 0,   status: 'under_review', daysBack: 22,  gpsVerified: true,  sessionMinutes: 5   },
   { wIdx: 5, triggerType: 'heavy_rain',      triggerValue: 17.3, fraudScore: 0.68, decision: 'MANUAL_REVIEW',payoutAmount: 0,   status: 'under_review', daysBack: 7,   gpsVerified: false, sessionMinutes: 30  },
   // ── AUTO_REJECT (2) ─────────────────────────────────────────────────
-  { wIdx: 2, triggerType: 'dangerous_aqi',   triggerValue: 298,  fraudScore: 0.91, decision: 'AUTO_REJECT',  payoutAmount: 0,   status: 'rejected',     daysBack: 18,  gpsVerified: false, sessionMinutes: 2   },
+  { wIdx: 2, triggerType: 'dangerous_aqi',   triggerValue: 355,  fraudScore: 0.91, decision: 'AUTO_REJECT',  payoutAmount: 0,   status: 'rejected',     daysBack: 18,  gpsVerified: false, sessionMinutes: 2   },
   { wIdx: 3, triggerType: 'flood',           triggerValue: 1,    fraudScore: 0.88, decision: 'AUTO_REJECT',  payoutAmount: 0,   status: 'rejected',     daysBack: 25,  gpsVerified: false, sessionMinutes: 1   },
   // ── Pending / soft-hold (3) ─────────────────────────────────────────
   { wIdx: 6, triggerType: 'flood',           triggerValue: 1,    fraudScore: 0.44, decision: 'SOFT_HOLD',    payoutAmount: 0,   status: 'pending',      daysBack: 14,  gpsVerified: true,  sessionMinutes: 60  },
