@@ -11,7 +11,8 @@ import Navbar       from '../components/Navbar.jsx'
 import AlertBanner  from '../components/AlertBanner.jsx'
 import PolicyCard   from '../components/PolicyCard.jsx'
 import WeatherWidget from '../components/WeatherWidget.jsx'
-import ClaimModal   from '../components/ClaimModal.jsx'
+import ClaimModal    from '../components/ClaimModal.jsx'
+import UpgradeModal  from '../components/UpgradeModal.jsx'
 import { getActivePolicy, getClaimsHistory, checkTriggers } from '../services/api.js'
 
 const decisionBadge = {
@@ -46,6 +47,7 @@ export default function WorkerDashboard() {
   const [totalPaid,       setTotalPaid]      = useState(0)
   const [activeTriggers,  setActiveTriggers] = useState([])
   const [showModal,       setShowModal]      = useState(false)
+  const [showUpgrade,     setShowUpgrade]    = useState(false)
   const [showBanner,      setShowBanner]     = useState(true)
   const [loading,         setLoading]        = useState(true)
   const [error,           setError]          = useState(null)
@@ -319,10 +321,11 @@ export default function WorkerDashboard() {
                 Standard Shield adds Rs.400 more coverage and covers up to 18 hrs/week — for only Rs.40–50/week.
               </p>
             </div>
-            <a href="/register"
+            <button
+              onClick={() => setShowUpgrade(true)}
               className="flex-shrink-0 text-xs font-bold text-navy border border-navy/30 bg-white hover:bg-navy hover:text-white px-3 py-1.5 rounded-lg transition-all">
               Upgrade
-            </a>
+            </button>
           </div>
         )}
 
@@ -407,6 +410,15 @@ export default function WorkerDashboard() {
           policy={policy}
           activeTriggers={activeTriggers}
           onClose={handleClaimFiled}
+        />
+      )}
+
+      {showUpgrade && policy && (
+        <UpgradeModal
+          worker={worker}
+          currentPolicy={policy}
+          onClose={() => setShowUpgrade(false)}
+          onUpgraded={() => { setShowUpgrade(false); loadDashboard() }}
         />
       )}
     </div>
