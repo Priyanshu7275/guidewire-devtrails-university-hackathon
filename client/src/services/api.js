@@ -92,6 +92,9 @@ export const getActivePolicy = (workerId) => api.get(`/policy/active/${workerId}
 /** Get full policy history for a worker. */
 export const getPolicyHistory = (workerId) => api.get(`/policy/history/${workerId}`)
 
+/** Cancel an active policy (used before upgrading). */
+export const cancelPolicy = (policyId) => api.patch(`/policy/${policyId}/cancel`)
+
 // ─────────────────────────────────────────────────────────────────────────────
 // TRIGGERS (Weather / AQI / News)
 // ─────────────────────────────────────────────────────────────────────────────

@@ -6,7 +6,7 @@
 import React, { useState, useEffect } from 'react'
 import { X, ShieldCheck, Zap, CheckCircle2 } from 'lucide-react'
 import toast from 'react-hot-toast'
-import { calculatePremium, createPolicy } from '../services/api'
+import { calculatePremium, createPolicy, cancelPolicy } from '../services/api'
 
 const PLAN_INFO = {
   standard: {
@@ -48,14 +48,19 @@ export default function UpgradeModal({ worker, currentPolicy, onClose, onUpgrade
   }, [worker.pincode, worker.tenureDays])
 
   async function handleUpgrade(planName) {
-    const newPremium   = plans[planName]?.finalPremium ?? 0
-    const topUp        = Math.max(0, newPremium - currentPremium)
+    const newPremium = plans[planName]?.finalPremium ?? 0
+    const topUp      = Math.max(0, newPremium - currentPremium)
     setBuying(planName)
     try {
+      // Step 1: cancel current active policy
+      if (currentPolicy?.policyId) {
+        await cancelPolicy(currentPolicy.policyId)
+      }
+      // Step 2: create new upgraded policy
       await createPolicy({
-        worker_id:     worker.workerId || worker.id,
-        plan:          planName,
-        premium_paid:  newPremium,
+        worker_id:    worker.workerId || worker.id,
+        plan:         planName,
+        premium_paid: newPremium,
       })
       toast.success(`Upgraded to ${PLAN_INFO[planName].label}! Rs.${topUp} charged.`)
       onUpgraded()

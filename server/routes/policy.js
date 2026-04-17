@@ -220,4 +220,30 @@ router.get('/history/:workerId', authMiddleware, async (req, res) => {
   }
 });
 
+// -----------------------------------------------------------------------
+// PATCH /api/policy/:policyId/cancel
+// Cancel an active policy so the worker can upgrade to a new one.
+// -----------------------------------------------------------------------
+router.patch('/:policyId/cancel', authMiddleware, async (req, res) => {
+  try {
+    const { policyId } = req.params;
+    const policy = await Policy.findById(policyId);
+    if (!policy) return res.status(404).json({ success: false, error: 'Policy not found.' });
+    if (policy.status !== 'active')
+      return res.status(400).json({ success: false, error: 'Only active policies can be cancelled.' });
+
+    policy.status = 'cancelled';
+    policy.endDate = new Date();
+    await policy.save();
+
+    // Clear activePolicyId on the worker
+    await Worker.findByIdAndUpdate(policy.workerId, { $unset: { activePolicyId: 1 } });
+
+    return res.status(200).json({ success: true, message: 'Policy cancelled.' });
+  } catch (err) {
+    console.error('[policy/:policyId/cancel]', err);
+    return res.status(500).json({ success: false, error: 'Failed to cancel policy.' });
+  }
+});
+
 module.exports = router;
