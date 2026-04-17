@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { CloudRain, Thermometer, Wind, Newspaper, RefreshCw, ExternalLink } from 'lucide-react'
+import { CloudRain, Thermometer, Wind, RefreshCw, ShieldCheck, AlertTriangle, Droplets, Sun } from 'lucide-react'
 import { checkTriggers } from '../services/api.js'
 
 function riskLevel(value, low, high) {
@@ -139,25 +139,53 @@ export default function WeatherWidget({ pincode, platform = 'blinkit' }) {
           rawValue={aqi.aqi ?? 0} low={100} high={250} />
       </div>
 
-      {/* News */}
-      {news.length > 0 && (
-        <div className="border-t border-slate-100 px-4 py-3">
-          <p className="text-2xs font-semibold text-slate-400 uppercase tracking-widest flex items-center gap-1 mb-2">
-            <Newspaper size={10} /> Zone News
-          </p>
-          <ul className="space-y-1.5">
-            {news.slice(0, 2).map((a, i) => (
-              <li key={i} className="flex items-start gap-1.5">
-                <div className="w-1 h-1 bg-slate-300 rounded-full mt-1.5 flex-shrink-0" />
-                <a href={a.url} target="_blank" rel="noopener noreferrer"
-                  className="text-xs text-slate-500 hover:text-navy transition-colors line-clamp-2 leading-tight flex-1">
-                  {a.title}
-                </a>
-              </li>
-            ))}
-          </ul>
-        </div>
-      )}
+      {/* Safety Tips based on live conditions */}
+      <div className="border-t border-slate-100 px-4 py-3">
+        <p className="text-2xs font-semibold text-slate-400 uppercase tracking-widest flex items-center gap-1 mb-2">
+          <ShieldCheck size={10} /> Rider Safety Tips
+        </p>
+        <ul className="space-y-1.5">
+          {[
+            weather.rain_mm > 15 && {
+              icon: <Droplets size={10} className="text-blue-500 flex-shrink-0 mt-0.5" />,
+              tip: 'Heavy rain active — reduce speed, avoid waterlogged roads. Your claim is auto-eligible.',
+              highlight: true,
+            },
+            weather.temp_c > 43 && {
+              icon: <Sun size={10} className="text-amber-500 flex-shrink-0 mt-0.5" />,
+              tip: 'Extreme heat alert — stay hydrated, take breaks every 30 mins. Heatstroke risk is high.',
+              highlight: true,
+            },
+            aqi.aqi > 350 && {
+              icon: <AlertTriangle size={10} className="text-rose-500 flex-shrink-0 mt-0.5" />,
+              tip: 'Dangerous AQI — wear N95 mask, limit outdoor exposure. Payout triggered.',
+              highlight: true,
+            },
+            firedTriggers.length === 0 && {
+              icon: <ShieldCheck size={10} className="text-emerald-500 flex-shrink-0 mt-0.5" />,
+              tip: 'Conditions are safe in your zone. Ride safely and stay covered.',
+              highlight: false,
+            },
+            weather.temp_c > 35 && weather.temp_c <= 43 && {
+              icon: <Sun size={10} className="text-amber-400 flex-shrink-0 mt-0.5" />,
+              tip: 'High temperature — carry water, wear light-coloured clothing.',
+              highlight: false,
+            },
+            weather.rain_mm > 5 && weather.rain_mm <= 15 && {
+              icon: <Droplets size={10} className="text-blue-400 flex-shrink-0 mt-0.5" />,
+              tip: 'Light rain — use rain gear, check tyre grip before deliveries.',
+              highlight: false,
+            },
+          ].filter(Boolean).slice(0, 2).map((item, i) => (
+            <li key={i} className="flex items-start gap-1.5">
+              {item.icon}
+              <span className={`text-xs leading-tight ${item.highlight ? 'text-slate-700 font-medium' : 'text-slate-500'}`}>
+                {item.tip}
+              </span>
+            </li>
+          ))}
+        </ul>
+      </div>
 
       {lastUpdated && (
         <div className="px-4 pb-3">
