@@ -4,3 +4,18 @@ gitinsure/__pycache__/
 gitinsure/giginsure.db
 .DS_Store
 Thumbs.db
+
+# Node / frontend / backend artifacts
+node_modules/
+client/node_modules/
+server/node_modules/
+client/dist/
+
+# Environment secrets
+server/.env
+client/.env
+.env
+
+# Local tooling folders
+.project-meta/
+**/.project-meta/

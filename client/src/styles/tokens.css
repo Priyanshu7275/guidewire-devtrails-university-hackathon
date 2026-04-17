@@ -1,0 +1,52 @@
+/*
+ * tokens.css — Design system CSS custom properties for GigInsure.
+ * Imported by index.css.  All values mirror tailwind.config.js so
+ * inline styles and raw CSS can reference the same tokens as Tailwind classes.
+ */
+
+:root {
+  /* ── Brand ─────────────────────────────────────────────────────── */
+  --navy:        #0B3B8C;   /* deep trust blue — primary action */
+  --navy-light:  #1A5CB4;
+  --navy-dark:   #082B6B;
+
+  /* ── Semantic ───────────────────────────────────────────────────── */
+  --success:     #059669;
+  --success-bg:  #ECFDF5;
+  --warning:     #F59E0B;
+  --warning-bg:  #FFFBEB;
+  --danger:      #EF4444;
+  --danger-bg:   #FEF2F2;
+  --info:        #3B82F6;
+  --info-bg:     #EFF6FF;
+
+  /* ── Surfaces ───────────────────────────────────────────────────── */
+  --surface:     #F8FAFF;   /* page background — subtle blue-tint white */
+  --surface-2:   #EFF6FF;   /* card / panel background */
+  --surface-3:   #DBEAFE;   /* highlighted / active row */
+
+  /* ── Text ───────────────────────────────────────────────────────── */
+  --text-primary:   #0F172A;
+  --text-secondary: #475569;
+  --text-muted:     #94A3B8;
+  --text-on-navy:   #FFFFFF;
+
+  /* ── Borders ────────────────────────────────────────────────────── */
+  --border:        #E2E8F0;
+  --border-strong: #CBD5E1;
+  --border-focus:  #0B3B8C;
+
+  /* ── Radius ─────────────────────────────────────────────────────── */
+  --radius-sm:  6px;
+  --radius:     8px;
+  --radius-md: 10px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  --radius-2xl:24px;
+
+  /* ── Shadow ─────────────────────────────────────────────────────── */
+  --shadow-card: 0 1px 3px 0 rgb(0 0 0 / 0.08), 0 1px 2px -1px rgb(0 0 0 / 0.06);
+  --shadow-md:   0 4px 6px -1px rgb(0 0 0 / 0.07), 0 2px 4px -2px rgb(0 0 0 / 0.07);
+  --shadow-lg:   0 10px 15px -3px rgb(0 0 0 / 0.07), 0 4px 6px -4px rgb(0 0 0 / 0.07);
+  --shadow-navy: 0 0 24px rgb(11 59 140 / 0.30);
+}

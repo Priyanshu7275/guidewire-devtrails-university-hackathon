@@ -1,14 +1,28 @@
 services:
   - type: web
-    name: gitinsure-api
-    env: docker
+    name: giginsure-api
+    env: node
     plan: free
     repo: https://github.com/Priyanshu7275/guidewire-devtrails-university-hackathon
     branch: main
-    # Build from repo root; set Docker context explicitly to project folder
-    dockerfilePath: gitinsure/Dockerfile
-    dockerContext: gitinsure
+    rootDir: server
+    buildCommand: npm install
+    startCommand: npm start
     autoDeploy: true
     envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10000
+      - key: MONGODB_URI
+        sync: false
+      - key: JWT_SECRET
+        sync: false
       - key: OPENWEATHERMAP_API_KEY
         value: "ed2d2f9dc32a0ebd848c9c4dc8c67dac"
+      - key: NEWS_API_KEY
+        sync: false
+      - key: RAZORPAY_KEY_ID
+        sync: false
+      - key: RAZORPAY_KEY_SECRET
+        sync: false
