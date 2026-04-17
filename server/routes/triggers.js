@@ -144,8 +144,52 @@ router.get('/check/:pincode', async (req, res) => {
       }
     }
 
-    // Fetch recent disruption news for the zone.
+    // Fetch recent disruption news and auto-detect curfew / flood / outage.
     const news = await fetchDisruptionNews(pincode);
+
+    const NEWS_TRIGGERS = [
+      {
+        type:     'curfew',
+        label:    'Curfew / Section 144',
+        keywords: ['curfew', 'section 144', 'prohibitory order', 'lockdown'],
+        message:  (title) => `Curfew detected: "${title}"`,
+      },
+      {
+        type:     'flood',
+        label:    'Flood / Waterlogging',
+        keywords: ['flood', 'waterlogging', 'inundated', 'submerged', 'heavy flood'],
+        message:  (title) => `Flood alert detected: "${title}"`,
+      },
+      {
+        type:     'platform_outage',
+        label:    'Platform / Strike',
+        keywords: ['strike', 'delivery strike', 'platform outage', 'zomato strike', 'swiggy strike', 'blinkit strike'],
+        message:  (title) => `Platform disruption detected: "${title}"`,
+      },
+    ]
+
+    for (const nt of NEWS_TRIGGERS) {
+      const matchedArticle = news.find(article => {
+        const text = `${article.title} ${article.description}`.toLowerCase()
+        return nt.keywords.some(kw => text.includes(kw))
+      })
+      if (matchedArticle) {
+        const entry = {
+          type:      nt.type,
+          triggered: true,
+          value:     1,
+          threshold: 1,
+          unit:      'news',
+          label:     nt.label,
+          message:   nt.message(matchedArticle.title),
+          source:    'newsapi',
+          article:   matchedArticle.url,
+        }
+        triggers.push(entry)
+        fired.push(nt.type)
+        await maybeLogTrigger(pincode, nt.type, 1, 1, 'newsapi')
+      }
+    }
 
     return res.status(200).json({
       pincode,

@@ -36,6 +36,7 @@ const cron = require('node-cron');
 const Policy = require('../models/Policy');
 const TriggerLog = require('../models/TriggerLog');
 const { getWeatherAndAQI } = require('./weatherService');
+const { fetchDisruptionNews } = require('./newsService');
 
 // -----------------------------------------------------------------------
 // Trigger definitions: each object describes one trigger type.
@@ -56,9 +57,16 @@ const TRIGGER_DEFINITIONS = [
   {
     type: 'dangerous_aqi',
     getValue: (_, aqi) => aqi.aqi,
-    threshold: 200,
+    threshold: 350,
     source: 'openweathermap',
   },
+];
+
+// News-based trigger keywords
+const NEWS_TRIGGER_DEFS = [
+  { type: 'curfew',           keywords: ['curfew', 'section 144', 'prohibitory order', 'lockdown'] },
+  { type: 'flood',            keywords: ['flood', 'waterlogging', 'inundated', 'submerged'] },
+  { type: 'platform_outage',  keywords: ['delivery strike', 'platform outage', 'zomato strike', 'swiggy strike', 'blinkit strike'] },
 ];
 
 /**
@@ -121,6 +129,35 @@ async function checkPincodeForTriggers(pincode) {
     console.log(
       `[scheduler] Trigger FIRED: ${trigger.type} at ${pincode} (value=${value}, threshold=${trigger.threshold})`
     );
+  }
+
+  // Check news-based triggers (curfew, flood, platform outage)
+  try {
+    const news = await fetchDisruptionNews(pincode);
+    if (news.length > 0) {
+      for (const nt of NEWS_TRIGGER_DEFS) {
+        const match = news.find(a =>
+          nt.keywords.some(kw => `${a.title} ${a.description}`.toLowerCase().includes(kw))
+        );
+        if (match) {
+          const thirtyMinAgo = new Date(Date.now() - 30 * 60 * 1000);
+          const exists = await TriggerLog.findOne({
+            pincode: String(pincode), triggerType: nt.type,
+            fired: true, detectedAt: { $gte: thirtyMinAgo },
+          });
+          if (!exists) {
+            await TriggerLog.create({
+              pincode: String(pincode), triggerType: nt.type,
+              value: 1, threshold: 1, fired: true,
+              source: 'newsapi', detectedAt: new Date(),
+            });
+            console.log(`[scheduler] News trigger FIRED: ${nt.type} at ${pincode} — "${match.title}"`);
+          }
+        }
+      }
+    }
+  } catch (err) {
+    console.warn(`[scheduler] News check failed for ${pincode}: ${err.message}`);
   }
 }
 
