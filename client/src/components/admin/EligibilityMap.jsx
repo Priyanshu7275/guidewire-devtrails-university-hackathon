@@ -393,8 +393,8 @@ export default function EligibilityMap() {
                     )}
                   </div>
 
-                  {/* Batch approve button */}
-                  {(zoneDetail.stats?.pending ?? 0) > 0 && (
+                  {/* Batch approve button — only for zones with active triggers */}
+                  {(zoneDetail.stats?.pending ?? 0) > 0 && (zoneDetail.activeTriggers?.length ?? 0) > 0 && (
                     <div className="px-4 pb-4">
                       <button
                         onClick={handleBatchApprove}
