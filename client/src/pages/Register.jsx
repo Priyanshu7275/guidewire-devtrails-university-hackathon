@@ -259,7 +259,7 @@ export default function Register() {
 
     setLoading(true)
     try {
-      const payload = { ...form, pincode: Number(form.pincode), daily_income: Number(form.daily_income) }
+      const payload = { ...form, pincode: String(form.pincode).trim(), daily_income: Number(form.daily_income) }
       const res     = await registerWorker(payload)
       setRegisteredData(res.data)
       setPlans(res.data.plans)

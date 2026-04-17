@@ -26,7 +26,9 @@ export default function Login() {
       toast.success(`Welcome back, ${res.data.name?.split(' ')[0] || 'Partner'}!`)
       navigate('/dashboard')
     } catch (err) {
-      setError(err.response?.data?.error || 'Login failed. Check your phone and password.')
+      const msg = err.response?.data?.error || 'Login failed. Check your phone and password.'
+      setError(msg)
+      toast.error(msg, { duration: 4000 })
     } finally {
       setLoading(false)
     }
