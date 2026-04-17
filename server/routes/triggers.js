@@ -16,7 +16,7 @@
  * TRIGGER THRESHOLDS:
  *   heavy_rain    : rain_mm > 15
  *   extreme_heat  : temp_c  > 43
- *   dangerous_aqi : aqi     > 200
+ *   dangerous_aqi : aqi     > 350
  * -----------------------------------------------------------------------
  */
 
@@ -52,9 +52,9 @@ const TRIGGER_DEFS = [
     type: 'dangerous_aqi',
     label: 'Dangerous AQI',
     unit: 'AQI',
-    threshold: 200,
+    threshold: 350,
     getValue: (_, a) => a.aqi,
-    message: (val) => `AQI of ${val} exceeds the 200 safe-air threshold.`,
+    message: (val) => `AQI of ${val} exceeds the 350 safe-air threshold.`,
   },
 ];
 
