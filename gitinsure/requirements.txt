@@ -1,0 +1,8 @@
+# GigInsure ML API — Python dependencies
+# Install with: pip install -r requirements.txt
+
+fastapi>=0.110.0
+uvicorn>=0.27.0
+numpy>=1.24.0
+scikit-learn>=1.3.0
+xgboost>=2.0.0
